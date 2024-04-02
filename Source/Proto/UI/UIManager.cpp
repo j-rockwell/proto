@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "UIManager.h"
 
 UUIManager* UUIManager::Instance = nullptr;
@@ -18,8 +17,13 @@ UUIManager* UUIManager::Get()
 		Instance->AddToRoot(); // Prevent GC
 
 		// Find and assign widget class refs
-		FStringClassReference ErrorDialogueClassRef(TEXT("WidgetBlueprint'/Game/UI/Dialogue/WBP_ErrorDialogue.WBP_ErrorDialogue_C'"));
-		UClass* ErrorDialogueWidgetClass = ErrorDialogueClassRef.TryLoadClass<UUserWidget>();
+		AsyncTask(ENamedThreads::GameThread, []() {
+			FStringClassReference ErrorDialogueClassRef(TEXT("WidgetBlueprint'/Game/UI/Dialogue/WBP_ErrorDialogue.WBP_ErrorDialogue_C'"));
+			FStringClassReference LobbyPlayerListClassRef(TEXT("WidgetBlueprint'/Game/UI/Menu/Lobby/WBP_LobbyPlayerList.WBP_LobbyPlayerList_C'"));
+
+			Instance->SetErrorMessageWidgetClass(ErrorDialogueClassRef.TryLoadClass<UUserWidget>());
+			Instance->SetLobbyPlayerListWidgetClass(LobbyPlayerListClassRef.TryLoadClass<UUserWidget>());
+		});
 	}
 
 	return Instance;
@@ -28,6 +32,11 @@ UUIManager* UUIManager::Get()
 UErrorDialogue* UUIManager::GetCurrentErrorDialogue()
 {
 	return CurrentErrorDialogue;
+}
+
+ULobbyPlayerList* UUIManager::GetLobbyPlayerList()
+{
+	return LobbyPlayerList;
 }
 
 void UUIManager::PromptErrorMessage(const FString& Message)
@@ -51,4 +60,27 @@ void UUIManager::PromptErrorMessage(const FString& Message)
 		CurrentErrorDialogue->SetErrorMessageText(Message);
 		CurrentErrorDialogue->AddToViewport();
 	}
+}
+
+void UUIManager::PromptLobbyPlayerList()
+{
+	AsyncTask(ENamedThreads::GameThread, [this]() {
+		if (LobbyPlayerList)
+		{
+			UE_LOG(LogTemp, Error, TEXT("LobbyPlayerList conflict"));
+			return;
+		}
+
+		UWorld* CurrentWorld = GetWorld();
+		LobbyPlayerList = CreateWidget<ULobbyPlayerList>(CurrentWorld, LobbyPlayerListWidgetClass); // TODO: LobbyPlayerListWidgetClass is not null, but this fails. Why has god forsaken me
+
+		if (!LobbyPlayerList)
+		{
+			UE_LOG(LogTemp, Error, TEXT("LobbyPlayerList was not created and assigned"));
+			return;
+		}
+
+		LobbyPlayerList->AddToViewport();
+		LobbyPlayerList->Populate();
+	});
 }

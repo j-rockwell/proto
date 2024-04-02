@@ -1,7 +1,7 @@
 // G-Spot Enterprises
 
-#include "../UI/UIManager.h"
 #include "LobbyPlayer.h"
+#include "../UI/UIManager.h"
 
 void ULobbyPlayer::Initialize(const CSteamID& InitSteamID)
 {

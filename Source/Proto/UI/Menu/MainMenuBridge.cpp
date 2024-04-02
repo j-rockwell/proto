@@ -1,8 +1,8 @@
 // G-Spot Enterprises
 
+#include "MainMenuBridge.h"
 #include "../../System/ProtoGameInstance.h"
 #include "../../System/Subsystems/SteamSubsystem.h"
-#include "MainMenuBridge.h"
 
 void UMainMenuBridge::OnSingleplayerPress()
 {

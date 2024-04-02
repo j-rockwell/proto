@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SteamSubsystem.h"
+#include "../../UI/Menu/LobbyPlayerList.h"
+#include "../../UI/UIManager.h"
 
 void USteamSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -43,6 +45,8 @@ void USteamSubsystem::AttemptCreateLobby()
 
 void USteamSubsystem::OnLobbyCreated(LobbyCreated_t* pResult, bool bIOFailure)
 {
+	UE_LOG(LogTemp, Log, TEXT("OnLobbyCreated called"));
+
 	if (pResult->m_eResult != k_EResultOK)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to create lobby: Bad result from Steam"));
@@ -60,6 +64,11 @@ void USteamSubsystem::OnLobbyCreated(LobbyCreated_t* pResult, bool bIOFailure)
 	const char* LeaderPersonaName = SteamFriends()->GetPersonaName();
 	SteamMatchmaking()->SetLobbyData(LobbyID, "name", LeaderPersonaName);
 
+	// init lobby and populate object
 	LobbyInstance = NewObject<ULobby>(this, ULobby::StaticClass());
 	LobbyInstance->Initialize(LobbyID, LeaderID);
+	UE_LOG(LogTemp, Log, TEXT("Lobby Instance initialized"));
+	
+	// render player list UI element
+	UUIManager::Get()->PromptLobbyPlayerList();
 }
