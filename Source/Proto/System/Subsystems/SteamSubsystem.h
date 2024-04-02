@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "../../Lobby/Lobby.h"
 #include "ThirdParty/Steamworks/Steamv153/sdk/public/steam/steam_api.h"
 #include "ThirdParty/Steamworks/Steamv153/sdk/public/steam/isteammatchmaking.h"
 #include "SteamSubsystem.generated.h"
@@ -20,6 +21,8 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 
+	ULobby* GetLobby() { return LobbyInstance; }
+
 	/**
 	* Returns true if Steam was properly
 	* initialized and SteamAPI calls can be
@@ -32,9 +35,12 @@ public:
 	* attempt a new lobby creation and returns the
 	* result in a CCallResult callback m_OnLobbyCreatedResult
 	*/
+	UFUNCTION(BlueprintCallable, Category="Multiplayer|Steam")
 	void AttemptCreateLobby();
 
 private:
+	ULobby* LobbyInstance = nullptr;
+
 	bool bSteamReady = false;
 
 	/**

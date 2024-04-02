@@ -56,6 +56,10 @@ void USteamSubsystem::OnLobbyCreated(LobbyCreated_t* pResult, bool bIOFailure)
 	}
 
 	CSteamID LobbyID = pResult->m_ulSteamIDLobby;
+	CSteamID LeaderID = SteamUser()->GetSteamID();
 	const char* LeaderPersonaName = SteamFriends()->GetPersonaName();
 	SteamMatchmaking()->SetLobbyData(LobbyID, "name", LeaderPersonaName);
+
+	LobbyInstance = NewObject<ULobby>(this, ULobby::StaticClass());
+	LobbyInstance->Initialize(LobbyID, LeaderID);
 }
