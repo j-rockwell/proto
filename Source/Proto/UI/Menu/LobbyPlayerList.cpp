@@ -27,24 +27,6 @@ void ULobbyPlayerList::NativeConstruct()
     UE_LOG(LogTemp, Log, TEXT("Loaded Player List Widgets - Player Names: %i, Player Avatar: %i"), PlayerNames.Num(), PlayerAvatars.Num());
 }
 
-void ULobbyPlayerList::Populate()
-{
-    UWorld* World = GEngine->GameViewport->GetWorld();
-    UProtoGameInstance* ProtoGameInstance = Cast<UProtoGameInstance>(World->GetGameInstance());
-    USteamSubsystem* Steam = ProtoGameInstance->GetSubsystem<USteamSubsystem>();
-    ULobby* LobbyInstance = Steam->GetLobby();
-
-    if (LobbyInstance)
-    {
-        TArray<ULobbyPlayer*> Players = LobbyInstance->GetPlayers();
-        for (int i = 0; i < Players.Num(); i++)
-        {
-            ULobbyPlayer* Player = Players[i];
-            SetPlayer(i, Player->GetDisplayName(), Player->GetAvatar());
-        }
-    }
-}
-
 void ULobbyPlayerList::SetPlayer(int32 Index, const FString& Username, UTexture2D* Avatar)
 {
     UTextBlock* TargetTextBlock = PlayerNames[Index];

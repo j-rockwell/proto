@@ -8,19 +8,12 @@
 #include "Blueprint/UserWidget.h"
 #include "LobbyPlayerList.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class PROTO_API ULobbyPlayerList : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	/**
-	* Populate reads current Lobby Instance data
-	* and populates any widgets with data upon
-	* initial widget creation
-	*/
-	void Populate();
-
 	/**
 	* SetPlayer populates a slot in the player list
 	* with the provided username and avatar information
@@ -32,6 +25,8 @@ public:
 	* provided index position.
 	*/
 	void ClearPlayer(int32 Index);
+
+	int32 GetNameCount() { return PlayerNames.Num(); }
 
 protected:
 	virtual void NativeConstruct() override;

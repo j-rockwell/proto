@@ -14,7 +14,7 @@ class PROTO_API UErrorDialogue : public UUserWidget
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI|Dialogue|Error")
-	void SetErrorMessageText(const FString& Message);
+	void SetErrorMessageText(const FString& ErrorMessage);
 
 protected:
 	UPROPERTY(meta = (BindWidget))

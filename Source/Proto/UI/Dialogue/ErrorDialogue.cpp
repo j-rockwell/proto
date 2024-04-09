@@ -3,7 +3,7 @@
 
 #include "ErrorDialogue.h"
 
-void UErrorDialogue::SetErrorMessageText(const FString& Message)
+void UErrorDialogue::SetErrorMessageText(const FString& ErrorMessage)
 {
-
+	ErrorMessageText->SetText(FText::FromString(ErrorMessage));
 }
