@@ -9,7 +9,6 @@ AEnemyBase::AEnemyBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -36,7 +35,7 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void AEnemyBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	// DOREPLIFETIME(AEnemyBase, GetHealth());
+	DOREPLIFETIME(AEnemyBase, Health);
 }
 
 void AEnemyBase::OnHealthChange()
