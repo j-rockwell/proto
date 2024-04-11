@@ -39,7 +39,7 @@ void ASpawnerBase::SpawnEntity()
 	FVector SpawnPosition = FVector(
 		Origin.X + FMath::RandRange(128.0, 256.0),
 		Origin.Y + FMath::RandRange(128.0, 256.0),
-		Origin.Z
+		Origin.Z + 100.0 // Prevents stuck in floor breaking navmesh
 	);
 
 	GetWorld()->SpawnActor<ACharacter>(EnemyBlueprint, SpawnPosition, FRotator::ZeroRotator);
